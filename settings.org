@@ -1,0 +1,189 @@
+#+TITLE: Emacs Configuration
+#+PROPERTY: header-args :tangle yes
+
+* Pacotes
+  #+begin_src emacs-lisp
+  (add-to-list 'package-archives
+  '("melpa" . "https://melpa.org/packages/"))
+  (add-to-list 'package-archives 
+  '("org" . "https://orgmode.org/elpa/"))
+  #+end_src
+* Setar pra UTF-8
+  #+begin_src emacs-lisp
+  (set-language-environment "UTF-8")
+  (set-default-coding-systems 'utf-8)
+  #+end_src
+* Tirar o Menu
+  #+begin_src emacs-lisp
+  (setq inhibit-startup-screen t)
+  #+end_src
+* Para de fazer backups e autosaves
+  #+begin_src emacs-lisp
+  (setq make-backup-files nil)
+  (setq auto-save-default nil)
+  #+end_src
+* Setar o Visual
+  Tema e Fonte
+  #+begin_src emacs-lisp
+  (custom-set-variables
+  '(ansi-color-faces-vector
+  [default default default italic underline success warning error])
+  '(ansi-color-names-vector
+  ["black" "#d55e00" "#009e73" "#f8ec59" "#0072b2" "#cc79a7" "#56b4e9" "white"])
+  '(column-number-mode t)
+  '(custom-enabled-themes (quote (manoj-dark)))
+  '(package-selected-packages
+  (quote
+  (org-bullets haskell-mode markdown-preview-mode markdown-mode ess web-mode org auctex ##))))
+  (custom-set-faces
+  '(default ((t (:family "Fira Code" :foundry "CTDB" :slant normal :weight normal :height 120 :width normal))))
+  '(font-lock-string-face ((t (:foreground "tomato" :slant italic)))))
+  (setq-default column-number-mode t)
+  (setq-default display-line-numbers t)
+  #+end_src
+  Implementação do Fira Code
+  #+begin_src emacs-lisp
+  (defun fira-code-mode--make-alist (list)
+  "Generate prettify-symbols alist from LIST."
+  (let ((idx -1))
+  (mapcar
+  (lambda (s)
+  (setq idx (1+ idx))
+  (let* ((code (+ #Xe100 idx))
+  (width (string-width s))
+  (prefix ())
+  (suffix '(?\s (Br . Br)))
+  (n 1))
+  (while (< n width)
+  (setq prefix (append prefix '(?\s (Br . Bl))))
+  (setq n (1+ n)))
+  (cons s (append prefix suffix (list (decode-char 'ucs code))))))
+  list)))
+  
+  (defconst fira-code-mode--ligatures
+  '("www" "**" "***" "**/" "*>" "*/" "\\\\" "\\\\\\"
+  "{-" "[]" "::" ":::" ":=" "!!" "!=" "!==" "-}"
+  "--" "---" "-->" "->" "->>" "-<" "-<<" "-~"
+  "#{" "#[" "##" "###" "####" "#(" "#?" "#_" "#_("
+  ".-" ".=" ".." "..<" "..." "?=" "??" ";;" "/*"
+  "/**" "/=" "/==" "/>" "//" "///" "&&" "||" "||="
+  "|=" "|>" "^=" "$>" "++" "+++" "+>" "=:=" "=="
+  "===" "==>" "=>" "=>>" "<=" "=<<" "=/=" ">-" ">="
+  ">=>" ">>" ">>-" ">>=" ">>>" "<*" "<*>" "<|" "<|>"
+  "<$" "<$>" "<!--" "<-" "<--" "<->" "<+" "<+>" "<="
+  "<==" "<=>" "<=<" "<>" "<<" "<<-" "<<=" "<<<" "<~"
+  "<~~" "</" "</>" "~@" "~-" "~=" "~>" "~~" "~~>" "%%"
+  ))
+  
+  (defvar fira-code-mode--old-prettify-alist)
+
+
+
+  (defun fira-code-mode--enable ()
+  "Enable Fira Code ligatures in current buffer."
+  (setq-local fira-code-mode--old-prettify-alist prettify-symbols-alist)
+  (setq-local prettify-symbols-alist (append (fira-code-mode--make-alist fira-code-mode--ligatures) fira-code-mode--old-prettify-alist))
+  (prettify-symbols-mode t))
+
+  (defun fira-code-mode--disable ()
+  "Disable Fira Code ligatures in current buffer."
+  (setq-local prettify-symbols-alist fira-code-mode--old-prettify-alist)
+  (prettify-symbols-mode -1))
+
+  (define-minor-mode fira-code-mode
+  "Fira Code ligatures minor mode"
+  :lighter " Fira Code"
+  (setq-local prettify-symbols-unprettify-at-point 'right-edge)
+  (if fira-code-mode
+  (fira-code-mode--enable)
+  (fira-code-mode--disable)))
+
+  (defun fira-code-mode--setup ()
+  "Setup Fira Code Symbols"
+  (set-fontset-font t '(#Xe100 . #Xe16f) "Fira Code Symbol"))
+
+  (provide 'fira-code-mode)
+  #+end_src
+* Programação
+** C/C++
+   Estilo do C++ que eu curto
+   #+begin_src emacs-lisp
+   (defun my-cc-style()
+   (c-set-style "linux")
+   (c-set-offset 'innamespace '4)
+   (c-set-offset 'inextern-lang '0)
+   (c-set-offset 'inline-open '0)
+   (c-set-offset 'label '*)
+   (c-set-offset 'access-label '/)
+   (setq c-basic-offset 4)
+   (setq tab-width 4)
+   (setq indent-tabs-mode nil)
+   (setq electric-pair-mode 1)
+   )
+   (add-hook 'c++-mode-hook 'my-cc-style)
+   (add-hook 'c-mode-hook 'my-cc-style)
+   #+end_src
+** Python3
+   Setar o interpretador padrão de python do emacs para python3
+   #+begin_src emacs-lisp
+   (setq python-shell-interpreter "python3")
+   #+end_src
+** My Local Electric Pair Mode 
+   Ativa o electric-pair-mode, o fira-code-mode e o flymake-mode
+   apenas para algumas linguagens a para o buffer atual.
+   #+begin_src emacs-lisp
+   (defun my-local-electric-pair-mode ()
+   (make-variable-buffer-local 'electric-pair-mode)
+   (electric-pair-mode +1)
+   (make-variable-buffer-local 'fira-code-mode)
+   (fira-code-mode +1)
+   (make-variable-buffer-local 'flymake-mode)
+   (flymake-mode +1))
+
+   (add-hook 'TeX-mode-hook 'my-local-electric-pair-mode)
+   (add-hook 'Emacs-Lisp-mode-hook 'my-local-electric-pair-mode)
+   (add-hook 'c-mode-hook 'my-local-electric-pair-mode)
+   (add-hook 'sh-mode-hook 'my-local-electric-pair-mode)
+   (add-hook 'html-mode-hook 'my-local-electric-pair-mode)
+   (add-hook 'js-mode-hook 'my-local-electric-pair-mode)
+   (add-hook 'c++-mode-hook 'my-local-electric-pair-mode)
+   (add-hook 'python-mode-hook 'my-local-electric-pair-mode)
+   #+end_src   
+** Org
+   Ativar org-bullet-mode ao entrar no org-mode
+   #+begin_src emacs-lisp
+   (defun my_org_style()
+   (make-variable-buffer-local 'org-bullet-mode)
+   (org-bullets-mode))
+   (add-hook 'org-mode-hook 'my_org_style)
+   #+end_src
+   
+   Minted para exportar código syntax-highlighted
+   #+begin_src emacs-lisp
+   (require 'org)
+   (require 'ox-latex)
+   (add-to-list 'org-latex-packages-alist '("" "minted"))
+   (setq org-latex-listings 'minted) 
+
+   (setq org-latex-pdf-process
+   '("pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"
+   "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"
+   "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"))
+
+   (setq org-src-fontify-natively t)
+
+   (org-babel-do-load-languages
+   'org-babel-load-languages
+   '((R . t)
+   (latex . t)))
+   #+end_src
+   
+   Ativando eval para outras linguagens no org-mode
+   #+begin_src emacs-lisp
+   (org-babel-do-load-languages
+   'org-babel-load-languages
+   '(
+   (C . t)
+   (haskell . t)
+   (python . t)))
+   #+end_src
