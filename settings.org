@@ -25,21 +25,27 @@
 * Setar o Visual
   Tema e Fonte
   #+begin_src emacs-lisp
-  (custom-set-variables
-  '(ansi-color-faces-vector
-  [default default default italic underline success warning error])
-  '(ansi-color-names-vector
-  ["black" "#d55e00" "#009e73" "#f8ec59" "#0072b2" "#cc79a7" "#56b4e9" "white"])
-  '(column-number-mode t)
-  '(custom-enabled-themes (quote (manoj-dark)))
-  '(package-selected-packages
-  (quote
-  (org-bullets haskell-mode markdown-preview-mode markdown-mode ess web-mode org auctex ##))))
-  (custom-set-faces
-  '(default ((t (:family "Fira Code" :foundry "CTDB" :slant normal :weight normal :height 120 :width normal))))
-  '(font-lock-string-face ((t (:foreground "tomato" :slant italic)))))
-  (setq-default column-number-mode t)
-  (setq-default display-line-numbers t)
+    ;; (custom-set-variables
+    ;; '(ansi-color-faces-vector
+    ;; [default default default italic underline success warning error])
+    ;; '(ansi-color-names-vector
+    ;; ["black" "#d55e00" "#009e73" "#f8ec59" "#0072b2" "#cc79a7" "#56b4e9" "white"])
+    ;; ["#292d3e" "#f07178" "#c3e88d" "#ffcb6b" "#82aaff" "#c792ea" "#89ddff" "d0d0d0"])
+    ;; '(column-number-mode t)
+    ;; '(custom-enabled-themes (quote (manoj-dark)))
+    ;; '(package-selected-packages
+    ;; (quote
+    ;; (org-bullets haskell-mode markdown-preview-mode markdown-mode ess web-mode org auctex ##))))
+    ;; (custom-set-faces
+    ;; '(default ((t (:family "Fira Code" :foundry "CTDB" :slant normal :weight normal :height 120 :width normal)))))
+    
+    (setq-default column-number-mode t)
+    (setq-default display-line-numbers t)
+    (add-to-list 'default-frame-alist' (font . "Fira Code Retina-12"))
+    (add-to-list 'default-frame-alist' (set-background-color "#292d3e"))
+    (add-to-list 'default-frame-alist' (set-foreground-color "#bbc5ff"))
+    (set-background-color "#292d3e")
+    (set-foreground-color "#bbc5ff")
   #+end_src
   Implementação do Fira Code
   #+begin_src emacs-lisp
