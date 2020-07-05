@@ -25,27 +25,20 @@
 * Setar o Visual
   Tema e Fonte
   #+begin_src emacs-lisp
-    ;; (custom-set-variables
-    ;; '(ansi-color-faces-vector
-    ;; [default default default italic underline success warning error])
-    ;; '(ansi-color-names-vector
-    ;; ["black" "#d55e00" "#009e73" "#f8ec59" "#0072b2" "#cc79a7" "#56b4e9" "white"])
-    ;; ["#292d3e" "#f07178" "#c3e88d" "#ffcb6b" "#82aaff" "#c792ea" "#89ddff" "d0d0d0"])
-    ;; '(column-number-mode t)
-    ;; '(custom-enabled-themes (quote (manoj-dark)))
-    ;; '(package-selected-packages
-    ;; (quote
-    ;; (org-bullets haskell-mode markdown-preview-mode markdown-mode ess web-mode org auctex ##))))
-    ;; (custom-set-faces
-    ;; '(default ((t (:family "Fira Code" :foundry "CTDB" :slant normal :weight normal :height 120 :width normal)))))
-    
-    (setq-default column-number-mode t)
-    (setq-default display-line-numbers t)
-    (add-to-list 'default-frame-alist' (font . "Fira Code Retina-12"))
-    (add-to-list 'default-frame-alist' (set-background-color "#292d3e"))
-    (add-to-list 'default-frame-alist' (set-foreground-color "#bbc5ff"))
-    (set-background-color "#292d3e")
-    (set-foreground-color "#bbc5ff")
+  (add-to-list 'custom-theme-load-path "~/.emacs.d/themes")
+  (load-theme 'dracula t)
+  (setq-default column-number-mode t)
+  (setq-default display-line-numbers t)
+  (add-to-list 'default-frame-alist' (font . "Fira Code Retina-12"))
+  (add-to-list 'default-frame-alist' (set-background-color "#292d3e"))
+  (add-to-list 'default-frame-alist' (set-foreground-color "#bbc5ff"))
+  (set-background-color "#292d3e")
+  (set-foreground-color "#bbc5ff")
+  #+end_src
+  
+  Configurando o tema
+  #+begin_src emacs-lisp
+  (setq dracula-enlarge-headings nil)
   #+end_src
   Implementação do Fira Code
   #+begin_src emacs-lisp
@@ -193,3 +186,18 @@
    (haskell . t)
    (python . t)))
    #+end_src
+
+** JS
+   #+begin_src emacs-lisp
+   (setq js-switch-indent-offset 4)
+   #+end_src
+* Configuração do Direx+Popwin
+  Sidebar de diretórios
+  #+begin_src emacs-lisp
+  (require 'direx)
+  (require 'popwin)
+  (push '(direx:direx-mode :position left :width 35 :dedicated t)
+  popwin:special-display-config)
+  (global-set-key (kbd "C-x C-j") 'direx:jump-to-directory-other-window)
+  (popwin-mode 1)
+  #+end_src

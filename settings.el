@@ -11,20 +11,8 @@
 (setq make-backup-files nil)
 (setq auto-save-default nil)
 
-;; (custom-set-variables
-;; '(ansi-color-faces-vector
-;; [default default default italic underline success warning error])
-;; '(ansi-color-names-vector
-;; ["black" "#d55e00" "#009e73" "#f8ec59" "#0072b2" "#cc79a7" "#56b4e9" "white"])
-;; ["#292d3e" "#f07178" "#c3e88d" "#ffcb6b" "#82aaff" "#c792ea" "#89ddff" "d0d0d0"])
-;; '(column-number-mode t)
-;; '(custom-enabled-themes (quote (manoj-dark)))
-;; '(package-selected-packages
-;; (quote
-;; (org-bullets haskell-mode markdown-preview-mode markdown-mode ess web-mode org auctex ##))))
-;; (custom-set-faces
-;; '(default ((t (:family "Fira Code" :foundry "CTDB" :slant normal :weight normal :height 120 :width normal)))))
-
+(add-to-list 'custom-theme-load-path "~/.emacs.d/themes")
+(load-theme 'dracula t)
 (setq-default column-number-mode t)
 (setq-default display-line-numbers t)
 (add-to-list 'default-frame-alist' (font . "Fira Code Retina-12"))
@@ -32,6 +20,8 @@
 (add-to-list 'default-frame-alist' (set-foreground-color "#bbc5ff"))
 (set-background-color "#292d3e")
 (set-foreground-color "#bbc5ff")
+
+(setq dracula-enlarge-headings nil)
 
 (defun fira-code-mode--make-alist (list)
 "Generate prettify-symbols alist from LIST."
@@ -156,3 +146,12 @@ list)))
 (C . t)
 (haskell . t)
 (python . t)))
+
+(setq js-switch-indent-offset 4)
+
+(require 'direx)
+(require 'popwin)
+(push '(direx:direx-mode :position left :width 35 :dedicated t)
+popwin:special-display-config)
+(global-set-key (kbd "C-x C-j") 'direx:jump-to-directory-other-window)
+(popwin-mode 1)
