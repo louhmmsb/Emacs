@@ -7,6 +7,7 @@
 (set-default-coding-systems 'utf-8)
 
 (setq inhibit-startup-screen t)
+(if window-system (tool-bar-mode -1))
 
 (setq make-backup-files nil)
 (setq auto-save-default nil)

@@ -13,9 +13,10 @@
   (set-language-environment "UTF-8")
   (set-default-coding-systems 'utf-8)
   #+end_src
-* Tirar o Menu
+* Tirar o Menu e a Startup Screen
   #+begin_src emacs-lisp
   (setq inhibit-startup-screen t)
+  (if window-system (tool-bar-mode -1))
   #+end_src
 * Para de fazer backups e autosaves
   #+begin_src emacs-lisp
