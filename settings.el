@@ -7,7 +7,21 @@
 (set-default-coding-systems 'utf-8)
 
 (setq inhibit-startup-screen t)
-(if window-system (tool-bar-mode -1))
+
+(defun my-frame-tweaks (&optional frame)
+"My personal frame tweaks."
+(unless frame
+(setq frame (selected-frame)))
+(when frame
+(with-selected-frame frame
+(when (display-graphic-p)
+(tool-bar-mode -1)))))
+;; For the case that the init file runs after the frame has been created.
+;; Call of emacs without --daemon option.
+(my-frame-tweaks) 
+;; For the case that the init file runs before the frame is created.
+;; Call of emacs with --daemon option.
+(add-hook 'after-make-frame-functions #'my-frame-tweaks t)
 
 (setq make-backup-files nil)
 (setq auto-save-default nil)
@@ -107,7 +121,7 @@ list)))
 (make-variable-buffer-local 'electric-pair-mode)
 (electric-pair-mode +1)
 (make-variable-buffer-local 'fira-code-mode)
-(fira-code-mode +1)
+;;(fira-code-mode +1)
 (make-variable-buffer-local 'flymake-mode)
 (flymake-mode +1))
 
@@ -119,6 +133,7 @@ list)))
 (add-hook 'js-mode-hook 'my-local-electric-pair-mode)
 (add-hook 'c++-mode-hook 'my-local-electric-pair-mode)
 (add-hook 'python-mode-hook 'my-local-electric-pair-mode)
+(add-hook 'dart-mode-hook 'my-local-electric-pair-mode)
 
 (defun my_org_style()
 (make-variable-buffer-local 'org-bullet-mode)
@@ -151,9 +166,43 @@ list)))
 
 (setq js-switch-indent-offset 4)
 
+(use-package lsp-mode :ensure t)
+(use-package lsp-dart 
+:ensure t 
+:hook (dart-mode . lsp))
+(with-eval-after-load 'projectile
+(add-to-list 'projectile-project-root-files-bottom-up "pubspec.yaml")
+(add-to-list 'projectile-project-root-files-bottom-up "BUILD"))
+;;(require 'projectile)
+;;(add-to-list 'projectile-project-root-files-bottom-up "pubspec.yaml")
+;;(add-to-list 'projectile-project-root-files-bottom-up "BUILD")
+(setq lsp-dart-flutter-sdk-dir "~/snap/flutter/common/flutter/")
+
+(use-package hover
+  :after dart-mode
+  :bind (:map dart-mode-map
+	      ("C-M-z" . #'hover-run-or-hot-reload)
+	      ("C-M-x" . #'hover-run-or-hot-restart))
+  :init
+  (setq hover-hot-reload-on-save t))
+
+(use-package lsp-mode
+  :hook (;; replace XXX-mode with concrete major-mode(e. g. python-mode)
+	 (dart-mode . lsp)
+	 (c++-mode . lsp)
+	 ;; if you want which-key integration
+	 (lsp-mode . lsp-enable-which-key-integration))
+  :commands lsp)
+;;(use-package lsp-ui :commands lsp-ui-mode)
+
 (require 'direx)
 (require 'popwin)
 (push '(direx:direx-mode :position left :width 35 :dedicated t)
 popwin:special-display-config)
 (global-set-key (kbd "C-x C-j") 'direx:jump-to-directory-other-window)
 (popwin-mode 1)
+(toggle-debug-on-error)
+
+(require 'server)
+(unless (server-running-p)
+(server-start))
