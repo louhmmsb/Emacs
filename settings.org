@@ -1,4 +1,5 @@
 #+TITLE: Emacs Configuration
+#+AUTHOR: Lourenço Henrique Moinheiro Martins Sborz Bogo
 #+PROPERTY: header-args :tangle yes
 
 * Pacotes
@@ -31,6 +32,10 @@
     ;; For the case that the init file runs before the frame is created.
     ;; Call of emacs with --daemon option.
     (add-hook 'after-make-frame-functions #'my-frame-tweaks t)
+  #+end_src
+* Ativar todos os comandos
+  #+begin_src emacs-lisp
+    (setq disabled-command-function nil)
   #+end_src
 * Para de fazer backups e autosaves
   #+begin_src emacs-lisp
@@ -137,6 +142,17 @@
        )
      (add-hook 'c++-mode-hook 'my-cc-style)
      (add-hook 'c-mode-hook 'my-cc-style)
+     (add-hook 'c++-mode-hook 'company-mode)
+   #+end_src
+   Configurando Irony Mode
+   #+begin_src emacs-lisp
+     (add-hook 'c++-mode-hook 'irony-mode)
+     (add-hook 'c-mode-hook 'irony-mode)
+     (add-hook 'objc-mode-hook 'irony-mode)
+
+     (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options)
+     (eval-after-load 'company
+       '(add-to-list 'company-backends 'company-irony))
    #+end_src
 ** Python3
    Setar o interpretador padrão de python do emacs para python3
@@ -204,6 +220,58 @@
 	(python . t)))
    #+end_src
 
+   Exportar para beamer
+   #+begin_src emacs-lisp
+     (unless (boundp 'org-export-latex-classes)
+       (setq org-export-latex-classes nil))
+     (add-to-list 'org-export-latex-classes
+       '("beamer"
+	  "\\documentclass[11pt]{beamer}\n
+	   \\mode<{{{beamermode}}}>\n
+	   \\usetheme{{{{beamertheme}}}}\n
+	   \\usecolortheme{{{{beamercolortheme}}}}\n
+	   \\beamertemplateballitem\n
+	   \\setbeameroption{show notes}
+	   \\usepackage[utf8]{inputenc}\n
+	   \\usepackage[T1]{fontenc}\n
+	   \\usepackage{hyperref}\n
+	   \\usepackage{color}
+	   \\usepackage{listings}
+	   \\lstset{numbers=none,language=[ISO]C++,tabsize=4,
+       frame=single,
+       basicstyle=\\small,
+       showspaces=false,showstringspaces=false,
+       showtabs=false,
+       keywordstyle=\\color{blue}\\bfseries,
+       commentstyle=\\color{red},
+       }\n
+	   \\usepackage{verbatim}\n
+	   \\institute{{{{beamerinstitute}}}}\n          
+	    \\subject{{{{beamersubject}}}}\n"
+
+	  ("\\section{%s}" . "\\section*{%s}")
+     
+	  ("\\begin{frame}[fragile]\\frametitle{%s}"
+	    "\\end{frame}"
+	    "\\begin{frame}[fragile]\\frametitle{%s}"
+	    "\\end{frame}")))
+
+       (add-to-list 'org-export-latex-classes
+
+       '("letter"
+	  "\\documentclass[11pt]{letter}\n
+	   \\usepackage[utf8]{inputenc}\n
+	   \\usepackage[T1]{fontenc}\n
+	   \\usepackage{color}"
+     
+	  ("\\section{%s}" . "\\section*{%s}")
+	  ("\\subsection{%s}" . "\\subsection*{%s}")
+	  ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+	  ("\\paragraph{%s}" . "\\paragraph*{%s}")
+	  ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
+
+   #+end_src
+
 ** JS
    Setar a identação do switch em javascript pra 4 espaços.
    #+begin_src emacs-lisp
@@ -241,7 +309,7 @@
      (use-package lsp-mode
        :hook (;; replace XXX-mode with concrete major-mode(e. g. python-mode)
 	      (dart-mode . lsp)
-	      (c++-mode . lsp)
+	      ;;(c++-mode . lsp)
 	      ;; if you want which-key integration
 	      (lsp-mode . lsp-enable-which-key-integration))
        :commands lsp)
@@ -251,6 +319,75 @@
    #+begin_src emacs-lisp
      (global-set-key (kbd "M-p") 'company-capf)
    #+end_src
+** Configurando o Company
+   #+begin_src emacs-lisp
+     (use-package company
+       :ensure t
+       :config
+       (setq company-idle-delay 0)
+       (setq company-minimum-prefix-length 3))
+
+     (use-package company-irony
+       :ensure t
+       :config
+       (require 'company)
+       (add-to-list 'company-backends 'company-irony))
+
+     (use-package irony
+       :ensure t
+       :config
+       (add-hook 'c++-mode-hook 'irony-mode)
+       (add-hook 'c-mode-hook 'irony-mode)
+       (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options))
+
+     (with-eval-after-load 'company
+       (add-hook 'c++-mode-hook 'company-mode)
+       (add-hook 'c-mode-hook 'company-mode))
+
+   #+end_src
+** Skeleton Mode
+*** Org-Mode
+    #+begin_src emacs-lisp
+      (define-skeleton org-latex-skeleton
+	"Skeleton for Latex exporting org files"
+	"Title: "
+	"#+TITLE: " str \n
+	;;"#+AUTHOR: " (setq v1 (skeleton-read "Author Name: ")) \n
+	"#+AUTHOR: " (shell-command-to-string "git config user.name")
+	"#+EMAIL: " (shell-command-to-string "git config user.email")
+	"#+LANGUAGE: pt-br" \n \n
+	"#+LATEX_HEADER: \\usepackage[hyperref, x11names]{xcolor}" \n
+	"#+LATEX_HEADER: \\hypersetup{colorlinks = true, urlcolor = SteelBlue4, linkcolor = black}" \n
+	"#+LATEX_HEADER: \\usepackage[AUTO]{babel}" \n
+	"#+LATEX_HEADER: \\usepackage{geometry}" \n
+	"#+LATEX_HEADER: \\geometry{verbose,a4paper,left=2cm,top=2cm,right=3cm,bottom=3cm}" \n
+	"#+latex_class_options: [11pt]"
+	)
+
+      (add-hook 'org-mode-hook
+		(lambda() (local-set-key "\C-csol" 'org-latex-skeleton)))
+    #+end_src
+
+*** C++
+    Esqueleto para código de maratona
+    #+begin_src emacs-lisp
+      (define-skeleton c++-marathon-header-skeleton
+	"Skleton for c++ marathon header"
+	nil
+	"#include<bits/stdc++.h>" \n
+	"using namespace std;" \n
+	"#define si(x) scanf(\"%d\", &x);" \n
+	"#define pi(x) printf(\"%d\\n\", x);" \n
+	"#define pb(x) push_back(x)" \n
+	"#define mp(x, y) make_pair(x, y)" \n \n  
+	"typedef long long int ll;" \n
+	"typedef unsigned long long int ull;" \n \n
+	_
+	)
+
+      (add-hook 'c++-mode-hook
+		(lambda() (local-set-key "\C-cscm" 'c++-marathon-header-skeleton)))
+    #+end_src
 * Configuração do Direx+Popwin
   Sidebar de diretórios
   #+begin_src emacs-lisp
@@ -260,7 +397,6 @@
 	  popwin:special-display-config)
     (global-set-key (kbd "C-x C-j") 'direx:jump-to-directory-other-window)
     (popwin-mode 1)
-    (toggle-debug-on-error)
   #+end_src
 * Emacsclient
   #+begin_src emacs-lisp
