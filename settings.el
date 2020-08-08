@@ -173,7 +173,8 @@
  '(
    (C . t)
    (haskell . t)
-   (python . t)))
+   (python . t)
+   (octave . t)))
 
 (unless (boundp 'org-export-latex-classes)
   (setq org-export-latex-classes nil))

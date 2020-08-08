@@ -217,7 +217,8 @@
       '(
 	(C . t)
 	(haskell . t)
-	(python . t)))
+	(python . t)
+	(octave . t)))
    #+end_src
 
    Exportar para beamer
