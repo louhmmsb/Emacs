@@ -212,6 +212,7 @@
    
    Ativando eval para outras linguagens no org-mode
    #+begin_src emacs-lisp
+     (setq org-confirm-babel-evaluate nil)
      (org-babel-do-load-languages
       'org-babel-load-languages
       '(
@@ -405,3 +406,4 @@
     (unless (server-running-p)
       (server-start))
   #+end_src
+
