@@ -116,15 +116,15 @@
   )
 (add-hook 'c++-mode-hook 'my-cc-style)
 (add-hook 'c-mode-hook 'my-cc-style)
-(add-hook 'c++-mode-hook 'company-mode)
+;;(add-hook 'c++-mode-hook 'company-mode)
 
-(add-hook 'c++-mode-hook 'irony-mode)
-(add-hook 'c-mode-hook 'irony-mode)
-(add-hook 'objc-mode-hook 'irony-mode)
+;;(add-hook 'c++-mode-hook 'irony-mode)
+;;(add-hook 'c-mode-hook 'irony-mode)
+;;(add-hook 'objc-mode-hook 'irony-mode)
 
-(add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options)
-(eval-after-load 'company
-  '(add-to-list 'company-backends 'company-irony))
+;;(add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options)
+;;(eval-after-load 'company
+;;'(add-to-list 'company-backends 'company-irony))
 
 (setq python-shell-interpreter "python3")
 
@@ -249,7 +249,7 @@
 
 (use-package lsp-mode
   :hook (;; replace XXX-mode with concrete major-mode(e. g. python-mode)
-	 (dart-mode . lsp)
+	 ;;(dart-mode . lsp)
 	 ;;(c++-mode . lsp)
 	 ;; if you want which-key integration
 	 (lsp-mode . lsp-enable-which-key-integration))
@@ -273,13 +273,14 @@
 (use-package irony
   :ensure t
   :config
-  (add-hook 'c++-mode-hook 'irony-mode)
-  (add-hook 'c-mode-hook 'irony-mode)
+  ;;(add-hook 'c++-mode-hook 'irony-mode)
+  ;;(add-hook 'c-mode-hook 'irony-mode)
   (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options))
 
 (with-eval-after-load 'company
-  (add-hook 'c++-mode-hook 'company-mode)
-  (add-hook 'c-mode-hook 'company-mode))
+  ;(add-hook 'c++-mode-hook 'company-mode)
+  ;(add-hook 'c-mode-hook 'company-mode)
+  )
 
 (define-skeleton org-latex-skeleton
   "Skeleton for Latex exporting org files"
@@ -301,7 +302,7 @@
 	  (lambda() (local-set-key "\C-csol" 'org-latex-skeleton)))
 
 (define-skeleton c++-marathon-header-skeleton
-  "Skleton for c++ marathon header"
+  "Skeleton for c++ marathon header"
   nil
   "#include<bits/stdc++.h>" \n
   "using namespace std;" \n
@@ -316,6 +317,12 @@
 
 (add-hook 'c++-mode-hook
 	  (lambda() (local-set-key "\C-cscm" 'c++-marathon-header-skeleton)))
+
+(yas-reload-all)
+
+(require 'yasnippet)
+(add-hook 'c-mode-hook 'yas-minor-mode)
+(add-hook 'c++-mode-hook 'yas-minor-mode)
 
 (require 'direx)
 (require 'popwin)

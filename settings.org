@@ -142,17 +142,17 @@
        )
      (add-hook 'c++-mode-hook 'my-cc-style)
      (add-hook 'c-mode-hook 'my-cc-style)
-     (add-hook 'c++-mode-hook 'company-mode)
+     ;;(add-hook 'c++-mode-hook 'company-mode)
    #+end_src
    Configurando Irony Mode
    #+begin_src emacs-lisp
-     (add-hook 'c++-mode-hook 'irony-mode)
-     (add-hook 'c-mode-hook 'irony-mode)
-     (add-hook 'objc-mode-hook 'irony-mode)
+     ;;(add-hook 'c++-mode-hook 'irony-mode)
+     ;;(add-hook 'c-mode-hook 'irony-mode)
+     ;;(add-hook 'objc-mode-hook 'irony-mode)
 
-     (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options)
-     (eval-after-load 'company
-       '(add-to-list 'company-backends 'company-irony))
+     ;;(add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options)
+     ;;(eval-after-load 'company
+     ;;'(add-to-list 'company-backends 'company-irony))
    #+end_src
 ** Python3
    Setar o interpretador padrão de python do emacs para python3
@@ -310,7 +310,7 @@
    #+begin_src emacs-lisp
      (use-package lsp-mode
        :hook (;; replace XXX-mode with concrete major-mode(e. g. python-mode)
-	      (dart-mode . lsp)
+	      ;;(dart-mode . lsp)
 	      ;;(c++-mode . lsp)
 	      ;; if you want which-key integration
 	      (lsp-mode . lsp-enable-which-key-integration))
@@ -338,13 +338,14 @@
      (use-package irony
        :ensure t
        :config
-       (add-hook 'c++-mode-hook 'irony-mode)
-       (add-hook 'c-mode-hook 'irony-mode)
+       ;;(add-hook 'c++-mode-hook 'irony-mode)
+       ;;(add-hook 'c-mode-hook 'irony-mode)
        (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options))
 
      (with-eval-after-load 'company
-       (add-hook 'c++-mode-hook 'company-mode)
-       (add-hook 'c-mode-hook 'company-mode))
+       ;(add-hook 'c++-mode-hook 'company-mode)
+       ;(add-hook 'c-mode-hook 'company-mode)
+       )
 
    #+end_src
 ** Skeleton Mode
@@ -389,6 +390,17 @@
 
       (add-hook 'c++-mode-hook
 		(lambda() (local-set-key "\C-cscm" 'c++-marathon-header-skeleton)))
+    #+end_src
+** Yasnippet Configuration
+*** General
+    #+begin_src emacs-lisp
+      (yas-reload-all)
+    #+end_src
+*** C/C++
+    #+begin_src emacs-lisp
+      (require 'yasnippet)
+      (add-hook 'c-mode-hook 'yas-minor-mode)
+      (add-hook 'c++-mode-hook 'yas-minor-mode)
     #+end_src
 * Configuração do Direx+Popwin
   Sidebar de diretórios
