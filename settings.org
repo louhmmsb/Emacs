@@ -374,7 +374,7 @@
     Esqueleto para código de maratona
     #+begin_src emacs-lisp
       (define-skeleton c++-marathon-header-skeleton
-	"Skleton for c++ marathon header"
+	"Skeleton for c++ marathon header"
 	nil
 	"#include<bits/stdc++.h>" \n
 	"using namespace std;" \n

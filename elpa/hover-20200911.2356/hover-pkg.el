@@ -1,0 +1,2 @@
+;;; Generated package description from /home/louhmmsb/.emacs.d/elpa/hover-20200911.2356/hover.el  -*- no-byte-compile: t -*-
+(define-package "hover" "20200911.2356" "Package to use hover with flutter" '((emacs "25.2") (dash "2.14.1")) :commit "e213f2b29b7728edd42e834260c13fffd0c48edc" :keywords '("hover" "flutter" "mobile" "tools") :authors '(("Eric Dallo")) :maintainer '("Eric Dallo") :url "https://github.com/ericdallo/hover.el")
