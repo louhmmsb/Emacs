@@ -1,0 +1,10 @@
+# contributor: Low <louhmmsb@hotmail.com>
+# name: if else expansion
+# key: if
+# --
+if($1) {
+       $2
+}
+else {
+     $3
+}

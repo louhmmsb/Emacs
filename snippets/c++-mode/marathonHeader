@@ -1,0 +1,22 @@
+# contributor: Low <louhmmsb@hotmail.com>
+# name: C++ Marathon Header
+# key: marathonHeader
+# binding: C-c sm
+# --
+#include<bits/stdc++.h>
+using namespace std;
+#define si(x) scanf("%d", &x)
+#define pi(x) printf("%d\n", x)
+#define pb(x) push_back(x)
+#define mp(x, y) make_pair(x, y)
+
+typedef long long int ll;
+typedef unsigned long long int ull;
+
+int main(){
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+    $0
+
+    return 0;
+}

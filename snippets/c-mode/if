@@ -1,0 +1,7 @@
+# contributor: Low <louhmmsb@hotmail.com>
+# name: if expansion
+# key: if
+# --
+if ($1) {
+   `yas-selected-text` $0
+}

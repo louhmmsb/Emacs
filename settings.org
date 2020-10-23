@@ -349,58 +349,21 @@
 
    #+end_src
 ** Skeleton Mode
-*** Org-Mode
-    #+begin_src emacs-lisp
-      (define-skeleton org-latex-skeleton
-	"Skeleton for Latex exporting org files"
-	"Title: "
-	"#+TITLE: " str \n
-	;;"#+AUTHOR: " (setq v1 (skeleton-read "Author Name: ")) \n
-	"#+AUTHOR: " (shell-command-to-string "git config user.name")
-	"#+EMAIL: " (shell-command-to-string "git config user.email")
-	"#+LANGUAGE: pt-br" \n \n
-	"#+LATEX_HEADER: \\usepackage[hyperref, x11names]{xcolor}" \n
-	"#+LATEX_HEADER: \\hypersetup{colorlinks = true, urlcolor = SteelBlue4, linkcolor = black}" \n
-	"#+LATEX_HEADER: \\usepackage[AUTO]{babel}" \n
-	"#+LATEX_HEADER: \\usepackage{geometry}" \n
-	"#+LATEX_HEADER: \\geometry{verbose,a4paper,left=2cm,top=2cm,right=3cm,bottom=3cm}" \n
-	"#+latex_class_options: [11pt]"
-	)
-
-      (add-hook 'org-mode-hook
-		(lambda() (local-set-key "\C-csol" 'org-latex-skeleton)))
-    #+end_src
-
-*** C++
-    Esqueleto para código de maratona
-    #+begin_src emacs-lisp
-      (define-skeleton c++-marathon-header-skeleton
-	"Skeleton for c++ marathon header"
-	nil
-	"#include<bits/stdc++.h>" \n
-	"using namespace std;" \n
-	"#define si(x) scanf(\"%d\", &x);" \n
-	"#define pi(x) printf(\"%d\\n\", x);" \n
-	"#define pb(x) push_back(x)" \n
-	"#define mp(x, y) make_pair(x, y)" \n \n  
-	"typedef long long int ll;" \n
-	"typedef unsigned long long int ull;" \n \n
-	_
-	)
-
-      (add-hook 'c++-mode-hook
-		(lambda() (local-set-key "\C-cscm" 'c++-marathon-header-skeleton)))
-    #+end_src
 ** Yasnippet Configuration
 *** General
     #+begin_src emacs-lisp
       (yas-reload-all)
+      (setq yas-prompt-functions '(yas-x-prompt yas-dropdown-prompt))
     #+end_src
 *** C/C++
     #+begin_src emacs-lisp
       (require 'yasnippet)
       (add-hook 'c-mode-hook 'yas-minor-mode)
       (add-hook 'c++-mode-hook 'yas-minor-mode)
+    #+end_src
+*** Org
+    #+begin_src emacs-lisp
+      (add-hook 'org-mode-hook 'yas-minor-mode)
     #+end_src
 * Configuração do Direx+Popwin
   Sidebar de diretórios
@@ -411,6 +374,13 @@
 	  popwin:special-display-config)
     (global-set-key (kbd "C-x C-j") 'direx:jump-to-directory-other-window)
     (popwin-mode 1)
+  #+end_src
+* Projectile
+  Setting up Projectile
+  #+begin_src emacs-lisp
+    (require 'projectile)
+    (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
+    (projectile-mode +1)
   #+end_src
 * Emacsclient
   #+begin_src emacs-lisp

@@ -1,0 +1,18 @@
+# contributor: Low <louhmmsb@hotmail.com>
+# name: Latex Export Header
+# key: latexHeader
+# binding: C-c sol
+# --
+#+TITLE: $1
+#+AUTHOR: ${2:`(shell-command-to-string "git config user.name")`}
+#+EMAIL: ${3:`(shell-command-to-string "git config user.email")`}
+#+LANGUAGE: pt-br
+
+#+LATEX_HEADER: \\usepackage[hyperref, x11names]{xcolor}
+#+LATEX_HEADER: \\hypersetup{colorlinks = true, urlcolor = SteelBlue4, linkcolor = black}
+#+LATEX_HEADER: \\usepackage[AUTO]{babel}
+#+LATEX_HEADER: \\usepackage{geometry}
+#+LATEX_HEADER: \\geometry{verbose,a4paper,left=2cm,top=2cm,right=3cm,bottom=3cm}
+#+latex_class_options: [11pt]
+
+$0

@@ -1,0 +1,11 @@
+# Arquivos do dentro da pasta de save
+auto-save-list/
+
+# Arquivo derivado da settings.org
+settings.el
+
+# Arquivos diversos
+transient/
+
+
+# Arquivos compilados
