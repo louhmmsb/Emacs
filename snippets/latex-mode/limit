@@ -1,5 +1,6 @@
 # contributor: Low <louhmmsb@hotmail.com>
 # name: Limits
 # key: lim
+# condition: (texmathp)
 # --
 \lim_{$1 \to $2}$0

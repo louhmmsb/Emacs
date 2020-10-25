@@ -1,5 +1,6 @@
 # contributor: Low <louhmmsb@hotmail.com>
 # name: Fractions
 # key: frac
+# condition: (texmathp)
 # --
 \frac{${1:numerator}}{${2:denominator}}$0

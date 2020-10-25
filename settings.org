@@ -8,6 +8,9 @@
 		 '("melpa" . "https://melpa.org/packages/"))
     (add-to-list 'package-archives 
 		 '("org" . "https://orgmode.org/elpa/"))
+
+    (eval-when-compile
+      (require 'use-package))
   #+end_src
 * Setar pra UTF-8
   #+begin_src emacs-lisp
@@ -192,8 +195,8 @@
    
    Minted para exportar código syntax-highlighted
    #+begin_src emacs-lisp
-     (require 'org)
-     (require 'ox-latex)
+     (use-package org)
+     (use-package ox-latex)
      (add-to-list 'org-latex-packages-alist '("" "minted"))
      (setq org-latex-listings 'minted) 
 
@@ -351,48 +354,45 @@
 ** Yasnippet Configuration
 *** General
     #+begin_src emacs-lisp
-      (yas-reload-all)
-      (setq yas-prompt-functions '(yas-x-prompt yas-dropdown-prompt))
-    #+end_src
-*** C/C++
-    #+begin_src emacs-lisp
-      (require 'yasnippet)
-      (add-hook 'c-mode-hook 'yas-minor-mode)
-      (add-hook 'c++-mode-hook 'yas-minor-mode)
-    #+end_src
-*** Org
-    #+begin_src emacs-lisp
-      (add-hook 'org-mode-hook 'yas-minor-mode)
-    #+end_src
-*** Latex
-    #+begin_src emacs-lisp
-      (add-hook 'TeX-mode-hook 'yas-minor-mode)
-    #+end_src
-*** Snippets
-    #+begin_src emacs-lisp
-      (add-hook 'snippet-mode-hook 'yas-minor-mode)
+      (use-package yasnippet
+	:hook
+	((c-mode c++-mode org-mode TeX-mode snippet-mode) . yas-minor-mode)
+	:config
+	(yas-reload-all)
+	(setq yas-prompt-functions '(yas-x-prompt yas-dropdown-prompt)))
     #+end_src
 * Configuração do Direx+Popwin
   Sidebar de diretórios
   #+begin_src emacs-lisp
-    (require 'direx)
-    (require 'popwin)
-    (push '(direx:direx-mode :position left :width 35 :dedicated t)
-	  popwin:special-display-config)
-    (global-set-key (kbd "C-x C-j") 'direx:jump-to-directory-other-window)
+    (use-package direx)
+    (use-package popwin
+      :after (direx)
+      :config
+      (push '(direx:direx-mode :position left :width 35 :dedicated t)
+	    popwin:special-display-config)
+      :bind ("C-x C-j" . direx:jump-to-directory-other-window))
+
     (popwin-mode 1)
   #+end_src
 * Projectile
   Setting up Projectile
   #+begin_src emacs-lisp
-    (require 'projectile)
-    (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
-    (projectile-mode +1)
+    (use-package projectile
+      :bind-keymap
+      ("C-c p" . projectile-command-map)
+      :config
+      (projectile-mode +1))
   #+end_src
 * Emacsclient
   #+begin_src emacs-lisp
-    (require 'server)
-    (unless (server-running-p)
-      (server-start))
+    (use-package server
+      :config
+      (unless (server-running-p)
+	(server-start)))
   #+end_src
-
+* Evil-Mode
+  #+begin_src emacs-lisp
+    (use-package evil
+      :config
+      (evil-mode 1))
+  #+end_src

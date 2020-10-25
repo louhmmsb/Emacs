@@ -3,6 +3,9 @@
 (add-to-list 'package-archives 
 	     '("org" . "https://orgmode.org/elpa/"))
 
+(eval-when-compile
+  (require 'use-package))
+
 (set-language-environment "UTF-8")
 (set-default-coding-systems 'utf-8)
 
@@ -151,8 +154,8 @@
   (org-bullets-mode))
 (add-hook 'org-mode-hook 'my_org_style)
 
-(require 'org)
-(require 'ox-latex)
+(use-package org)
+(use-package ox-latex)
 (add-to-list 'org-latex-packages-alist '("" "minted"))
 (setq org-latex-listings 'minted) 
 
@@ -282,30 +285,34 @@
   ;(add-hook 'c-mode-hook 'company-mode)
   )
 
-(yas-reload-all)
-(setq yas-prompt-functions '(yas-x-prompt yas-dropdown-prompt))
+(use-package yasnippet
+  :hook
+  ((c-mode c++-mode org-mode TeX-mode snippet-mode) . yas-minor-mode)
+  :config
+  (yas-reload-all)
+  (setq yas-prompt-functions '(yas-x-prompt yas-dropdown-prompt)))
 
-(require 'yasnippet)
-(add-hook 'c-mode-hook 'yas-minor-mode)
-(add-hook 'c++-mode-hook 'yas-minor-mode)
+(use-package direx)
+(use-package popwin
+  :after (direx)
+  :config
+  (push '(direx:direx-mode :position left :width 35 :dedicated t)
+	popwin:special-display-config)
+  :bind ("C-x C-j" . direx:jump-to-directory-other-window))
 
-(add-hook 'org-mode-hook 'yas-minor-mode)
-
-(add-hook 'TeX-mode-hook 'yas-minor-mode)
-
-(add-hook 'snippet-mode-hook 'yas-minor-mode)
-
-(require 'direx)
-(require 'popwin)
-(push '(direx:direx-mode :position left :width 35 :dedicated t)
-      popwin:special-display-config)
-(global-set-key (kbd "C-x C-j") 'direx:jump-to-directory-other-window)
 (popwin-mode 1)
 
-(require 'projectile)
-(define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
-(projectile-mode +1)
+(use-package projectile
+  :bind-keymap
+  ("C-c p" . projectile-command-map)
+  :config
+  (projectile-mode +1))
 
-(require 'server)
-(unless (server-running-p)
-  (server-start))
+(use-package server
+  :config
+  (unless (server-running-p)
+    (server-start)))
+
+(use-package evil
+  :config
+  (evil-mode 1))

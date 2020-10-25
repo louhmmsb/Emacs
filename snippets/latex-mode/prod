@@ -1,5 +1,6 @@
 # contributor: Low <louhmmsb@hotmail.com>
 # name: prod_{}^{}
 # key: prod
+# condition: (texmathp)
 # --
 \prod_{$1}^{$2}$0
