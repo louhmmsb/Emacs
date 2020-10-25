@@ -1,0 +1,9 @@
+# contributor: Low <louhmmsb@hotmail.com>
+# name: Template for new Snippets
+# key: template
+# --
+# contributor: ${1:`(replace-regexp-in-string "\n$" "" (shell-command-to-string "git config user.name"))`} <${2:`(replace-regexp-in-string "\n$" "" (shell-command-to-string "git config user.email"))`}>
+# name: $3
+# key: $4
+# --
+$0

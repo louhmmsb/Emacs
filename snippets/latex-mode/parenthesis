@@ -1,0 +1,7 @@
+# contributor: Low <louhmmsb@hotmail.com>
+# name: \left( \right)
+# key: ()
+# condition: (texmathp)
+# --
+
+\left( $0 \right)

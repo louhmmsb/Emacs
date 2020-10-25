@@ -1,0 +1,13 @@
+# contributor: Low <louhmmsb@hotmail.com>
+# name: Generate Setters and Getters
+# key: sag
+# --
+
+void set${2:$(upcase-initials yas-text)}(${1:type} _${2:field}){
+     this->$2 = _$2;
+}
+
+$1 get${2:$(upcase-initials yas-text)}(){
+   return $2;
+}
+$0

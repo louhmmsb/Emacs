@@ -291,6 +291,10 @@
 
 (add-hook 'org-mode-hook 'yas-minor-mode)
 
+(add-hook 'TeX-mode-hook 'yas-minor-mode)
+
+(add-hook 'snippet-mode-hook 'yas-minor-mode)
+
 (require 'direx)
 (require 'popwin)
 (push '(direx:direx-mode :position left :width 35 :dedicated t)

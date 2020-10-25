@@ -1,0 +1,5 @@
+# contributor: Low <louhmmsb@hotmail.com>
+# name: \sum_{}^{}
+# key: sum
+# --
+\sum_{$1}^{$2}$0
